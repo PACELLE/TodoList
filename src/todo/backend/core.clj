@@ -1,10 +1,12 @@
 (ns todo.backend.core
-  (:require [ring.adapter.jetty :as jetty]       ;; 1. O software do Servidor (Jetty)
-            [reitit.ring :as ring]               ;; 2. O Roteador (Reitit)
+  (:require [ring.adapter.jetty :as jetty]
+            [reitit.ring :as ring]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
-            [todo.backend.handler :as handler])  ;; 3. Nossas funções (handler.clj)
+            [todo.backend.handler :as handler]
+            [ring.middleware.cors :refer [wrap-cors]]
+            [todo.backend.handler :as handler])
   (:gen-class))
 
 ;; --- 1. Definição das Rotas ---
@@ -21,26 +23,15 @@
 ;; --- 2. Definição da Aplicação (App) ---
 (def app
   (ring/ring-handler
-   app-routes                     ;; Nossas rotas
-   (ring/create-default-handler)  ;; Handler padrão para 404 (Not Found)
-
-   ;; --- A "Linha de Montagem" de Middlewares ---
-   ;; A requisição percorre o vetor DE CIMA PARA BAIXO até chegar
-   ;; ao handler; a resposta volta DE BAIXO PARA CIMA.
-   {:middleware [;; 1. Converte a *resposta* (nosso mapa) em JSON
+   app-routes
+   (ring/create-default-handler)
+   {:middleware [[wrap-cors
+                  :access-control-allow-origin [#"http://localhost:8000"]
+                  :access-control-allow-methods [:get :post :put :delete]
+                  :access-control-allow-headers ["Content-Type"]]
                  wrap-json-response
-
-                 ;; 2. Converte o *corpo* da requisição (JSON)
-                 ;;    em um mapa Clojure e o coloca em :body
                  [wrap-json-body {:keywords? true}]
-
-                 ;; 3. Lê parâmetros de URL (ex: /user?id=1)
-                 ;;    e os coloca em :query-params (chaves string)
                  wrap-params
-
-                 ;; 4. Converte as chaves-string dos parâmetros
-                 ;;    em keywords ("id" -> :id).
-                 ;;    Precisa vir DEPOIS do wrap-params!
                  wrap-keyword-params]}))
 
 ;; --- 3. Função para Iniciar o Servidor ---
