@@ -27,3 +27,18 @@
     (:description todo-data)
     0
     (str (java.time.Instant/now))]))
+
+(defn toggle-todo! [id]
+  (jdbc/execute-one! db-spec ["
+    UPDATE todos
+    SET completed = (1 - completed)
+    WHERE id = ?
+    RETURNING *"
+    id]))
+
+(defn delete-todo! [id]
+  (jdbc/execute-one! db-spec ["
+    DELETE FROM todos
+    WHERE id = ?
+    RETURNING *"
+    id]))

@@ -1,43 +1,33 @@
 (ns todo.backend.handler
-  "Este namespace define nossas 'funções de resposta' (Handlers)."
-  (:require [todo.backend.db :as db]     ;; <- ADICIONE ISTO
-            [clojure.string :as str]))   ;; <- E ISTO (para validação)
+  (:require [todo.backend.db :as db]
+            [clojure.string :as str]))
 
-(defn hello-handler
-  "Nosso primeiro handler. Ele apenas diz 'Olá, Mundo!'"
-  [_request] ;; 1. O handler recebe a 'request' como argumento.
-             ;;    Usamos '_' para sinalizar que, nesta função,
-             ;;    vamos ignorar esse argumento.
-  ;; 2. O handler retorna um mapa de 'response'.
-  {:status 200            ;; :status 200 é o código HTTP para "OK"
-   :body "Hello, World!"}) ;; :body é o conteúdo enviado ao navegador
+(defn hello-handler [_request]
+  {:status 200
+   :body "Hello, World!"})
 
-;; --- Handler para Listar Todos ---
-(defn list-todos-handler
-  "Handler para a rota GET /api/todos."
-  [_request]
-  ;; Chama nossa função de banco e a coloca no 'body'
+(defn list-todos-handler [_request]
   {:status 200
    :body {:todos (db/get-all-todos)}})
 
-;; --- Handler para Criar um Todo ---
-(defn create-todo-handler
-  "Handler para a rota POST /api/todos."
-  [request]
-  ;; :body é um mapa Clojure que o *middleware*
-  ;; (que adicionaremos no próximo passo) vai criar para nós
-  ;; a partir do JSON que o cliente enviar.
+(defn create-todo-handler [request]
   (let [todo-data (:body request)
         title (:title todo-data)]
-
-    ;; É uma boa prática validar os dados que chegam.
     (if (and title (not (str/blank? title)))
-      ;; Sucesso! Os dados são válidos.
       (let [new-todo (db/create-todo todo-data)]
-        ;; :status 201 = "Created"
         {:status 201
          :body new-todo})
-
-      ;; Erro de validação.
-      {:status 400 ;; "Bad Request"
+      {:status 400
        :body {:error "O 'título' (title) é obrigatório"}})))
+
+(defn toggle-todo-handler [request]
+  (let [id (Integer/parseInt (get-in request [:path-params :id]))]
+    (if-let [updated-todo (db/toggle-todo! id)]
+      {:status 200 :body updated-todo}
+      {:status 404 :body {:error "Todo não encontrado"}})))
+
+(defn delete-todo-handler [request]
+  (let [id (Integer/parseInt (get-in request [:path-params :id]))]
+    (if-let [deleted-todo (db/delete-todo! id)]
+      {:status 200 :body deleted-todo}
+      {:status 404 :body {:error "Todo não encontrado"}})))
