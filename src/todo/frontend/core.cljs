@@ -8,11 +8,8 @@
 (defonce app-state (r/atom {:input-text ""
                             :todos []}))
 
-;; --- A URL base da nossa API (o backend, porta 3000) ---
 (def api-url "http://localhost:3000/api")
 
-;; Função auxiliar: faz o fetch e converte a resposta JSON
-;; em dados Clojure (mapas com keywords).
 (defn fetch-json [url options]
   (-> (js/fetch url (clj->js options))
       (.then (fn [response]
@@ -37,10 +34,7 @@
       (<p! (fetch-json (str api-url "/todos")
                        {:method "POST"
                         :headers {"Content-Type" "application/json"}
-                        ;; Converte o mapa Clojure em uma string JSON
                         :body (js/JSON.stringify (clj->js todo-data))}))
-
-      ;; Se o POST funcionou, recarregamos a lista
       (get-todos)
       (catch js/Error e
         (swap! app-state assoc :error (.-message e) :loading false)))))
@@ -56,14 +50,14 @@
     {:on-click (fn []
                  (create-todo {:title (:input-text @app-state)})
                  (swap! app-state assoc :input-text ""))}
-    "Adicionar (Local)"]])
+    "Adicionar"]])
 
 (defn todo-list []
   [:ul.todo-list
    (for [todo (:todos @app-state)]
-     ^{:key (:id todo)}
+     ^{:key (:todos/id todo)}
      [:li.todo-item
-      (:title todo)])])
+      (:todos/title todo)])])
 
 (defn app []
   [:div.todo-app
