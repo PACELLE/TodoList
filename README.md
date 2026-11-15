@@ -4,7 +4,7 @@
 
 ## Integrantes da Dupla
 - **Arthur Guimarães**
-- **Henrique Pacelle**
+- **Pacelle Henrique**
 
 **Tutorial original:** [Tutorial Clojure/ClojureScript: Construindo uma Aplicação Persistente e Reativa](https://lambdageo-edu.github.io/lambdageo-tutorials/clojure/)
 
