@@ -1,7 +1,14 @@
 # Todo List — Clojure/ClojureScript
 
-**Aluno(a):** Arthur Guimarães
+> 🎥 **Vídeo de Apresentação:** [Link do Vídeo no YouTube / Google Drive](URL_DO_VIDEO_AQUI)
+
+## Integrantes da Dupla
+- **Arthur Guimarães**
+- **Henrique Pacelle**
+
 **Tutorial original:** [Tutorial Clojure/ClojureScript: Construindo uma Aplicação Persistente e Reativa](https://lambdageo-edu.github.io/lambdageo-tutorials/clojure/)
+
+---
 
 ## Descrição
 
@@ -11,6 +18,8 @@ Aplicação full-stack de lista de tarefas (Todo List), construída de forma inc
 - **Banco de dados:** SQLite, acessado via [next.jdbc](https://github.com/seancorfield/next-jdbc), com persistência real em disco (`prod.db`).
 - **Frontend:** ClojureScript com [Reagent](https://github.com/reagent-project/reagent) (React) e [Shadow-CLJS](https://github.com/thheller/shadow-cljs), consumindo a API via `fetch`.
 
+---
+
 ## Pré-requisitos
 
 | Ferramenta | Versão mínima |
@@ -18,6 +27,8 @@ Aplicação full-stack de lista de tarefas (Todo List), construída de forma inc
 | Java (JDK) | 11+ |
 | [Clojure CLI](https://clojure.org/guides/install_clojure) (`clj` / `clojure`) | 1.11+ |
 | Node.js (`node` / `npm`) | 18+ |
+
+---
 
 ## Como Rodar
 
@@ -49,6 +60,8 @@ Aguarde a mensagem `Build completed`.
 4. **Acesse no navegador:**
 
 Abra [http://localhost:8000](http://localhost:8000)
+
+---
 
 ## Endpoints da API
 
