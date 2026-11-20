@@ -1,6 +1,6 @@
 # Todo List — Clojure/ClojureScript
 
-> 🎥 **Vídeo de Apresentação:** [Link do Vídeo no YouTube / Google Drive]([URL_DO_VIDEO_AQUI](https://youtu.be/BC871nt--eE))
+> 🎥 **Vídeo de Apresentação:** [Link do Vídeo no YouTube / Google Drive]([(https://youtu.be/BC871nt--eE)])
 
 ## Integrantes da Dupla
 - **Arthur Guimarães**
